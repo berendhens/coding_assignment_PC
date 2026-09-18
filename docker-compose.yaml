@@ -1,0 +1,9 @@
+services:
+  api:
+    # Name of this service (arbitrary, but used for logs/reference)
+    build: .
+    # Build the image from the Dockerfile in the current directory
+    ports:
+      - "8000:8000"
+    # host_port:container_port: maps local machine's 8000 to the container's 8000.
+    container_name: PC-test-inference-api
