@@ -10,7 +10,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY main.py .
 COPY model.py .
 COPY use_labels.py .
-COPY normalize.py .
+COPY preprocessing.py .
 
 # Copy the trained model artifacts (weights + label explanation)
 COPY outputs/run_2026-09-20_19-43-46/ ./outputs/run_2026-09-20_19-43-46/
