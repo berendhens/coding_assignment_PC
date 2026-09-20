@@ -5,6 +5,7 @@ from use_config import load_config
 from split_data import split_data
 from train import train_model
 from validate import validate_model
+from save_run import save_run
 
 if __name__ == "__main__":
     config = load_config("config.yaml")
@@ -32,3 +33,5 @@ if __name__ == "__main__":
 
     metrics = validate_model(model, df_val, labels, config)
     print(f"\nOverall accuracy: {metrics['macro_avg']['accuracy']:.3f}, \n Overall 11: {metrics['macro_avg']['f1']:.3f}")
+
+    run_directory = save_run(model, history, metrics, config, labels, base_dir="outputs")
