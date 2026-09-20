@@ -11,7 +11,6 @@ preprocessing:
   normalization: "zscore"    # per-sample, as discussed
   epsilon: 1.0e-8             # avoid div-by-zero on constant series
 
-# Comes in testing and training ########
 model:
   backbone: "cnn1d"
   conv_channels: [32, 64, 128]
@@ -23,7 +22,6 @@ training:
   epochs: 20
   learning_rate: 0.001
   optimizer: "adam"
-#########################################
 
 paths:
   artifacts_dir: "./data"
