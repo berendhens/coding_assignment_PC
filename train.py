@@ -16,7 +16,7 @@ class CreateDataset(Dataset):
         # Model only needs time-series, task assigned to series, and the GT label
         series = torch.tensor(row["Series"], dtype=torch.float32)
         label_idx = torch.tensor(row["label_idx"], dtype=torch.long)
-        task = row["Task"]
+        task = row["Task"].lower() # Make task lower cases, to match earlier made lowercases
         return series, label_idx, task
 
 def train_model(df_train, df_val, config, labels):

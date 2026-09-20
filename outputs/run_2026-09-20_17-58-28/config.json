@@ -1,0 +1,32 @@
+{
+  "seed": 67,
+  "data": {
+    "dataset_name": "ChengsenWang/TSQA",
+    "cache_dir": "./data/raw",
+    "val_split": 0.2
+  },
+  "preprocessing": {
+    "normalization": "zscore",
+    "epsilon": 1e-08
+  },
+  "model": {
+    "backbone": "cnn1d",
+    "conv_channels": [
+      32,
+      64,
+      128
+    ],
+    "kernel_size": 5
+  },
+  "training": {
+    "batch_size": 64,
+    "epochs": 2,
+    "learning_rate": 0.001,
+    "optimizer": "adam"
+  },
+  "paths": {
+    "artifacts_dir": "./data",
+    "label_path": "./data/labels.json",
+    "output_dir": "./outputs"
+  }
+}

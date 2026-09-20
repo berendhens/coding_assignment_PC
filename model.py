@@ -51,11 +51,13 @@ def masked_loss(outputs, batch_labels, batch_tasks):
     batch_tasks: (batch,) list/array of task strings, e.g. 'trend'
     """
     total_loss = 0.0
+    matched_head = False
     for attr in outputs:
         # Create mask for attr in batch, all correct attr indicated as True
         mask = [t == attr for t in batch_tasks]
         if not any(mask):
             continue # Don't calculate loss for attr if this attr doesn't occur in batch
+        matched_head = True
         # Convert mask into Torch Tensor for loss calculation
         idx = torch.tensor(mask, dtype=torch.bool)
         # Calculate loss for this attribute (cross entropy) by comparing outputs with GT
@@ -63,4 +65,9 @@ def masked_loss(outputs, batch_labels, batch_tasks):
         # shape of tensor goes from (B, 3) to (X, 3) with X amount of attr designated time-series in the batch
         # Add this loss to total batch loss
         total_loss += F.cross_entropy(outputs[attr][idx], batch_labels[idx])
+
+    # Check if there is any match in attribute in the batch --> this can't be not True
+    if not matched_head:
+        raise ValueError(f"No task in batch matched any head. Heads: {list(outputs.keys())}, batch tasks: {set(batch_tasks)}")
+
     return total_loss

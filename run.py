@@ -32,6 +32,6 @@ if __name__ == "__main__":
     print(f"Training complete. Final val_loss: {history[-1]['val_loss']:.4f}")
 
     metrics = validate_model(model, df_val, labels, config)
-    print(f"\nOverall accuracy: {metrics['macro_avg']['accuracy']:.3f}, \n Overall 11: {metrics['macro_avg']['f1']:.3f}")
+    print(f"\nOverall accuracy: {metrics['macro_avg']['accuracy']:.3f}, \n Overall F1: {metrics['macro_avg']['f1']:.3f}")
 
     run_directory = save_run(model, history, metrics, config, labels, base_dir="outputs")

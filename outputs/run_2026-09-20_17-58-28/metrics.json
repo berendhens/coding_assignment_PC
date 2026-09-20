@@ -1,0 +1,36 @@
+{
+  "per_task": {
+    "outliers": {
+      "accuracy": 0.9016666666666666,
+      "f1_macro": 0.8996284978511566,
+      "mean_confidence": 0.8696045961976051,
+      "n_samples": 600,
+      "random_baseline_accuracy": 0.3883333333333333
+    },
+    "seasonality": {
+      "accuracy": 0.68,
+      "f1_macro": 0.6009850681130958,
+      "mean_confidence": 0.800003026475509,
+      "n_samples": 600,
+      "random_baseline_accuracy": 0.31166666666666665
+    },
+    "trend": {
+      "accuracy": 1.0,
+      "f1_macro": 1.0,
+      "mean_confidence": 0.9895596347252528,
+      "n_samples": 600,
+      "random_baseline_accuracy": 0.29833333333333334
+    },
+    "volatility": {
+      "accuracy": 0.52,
+      "f1_macro": 0.4721065273255176,
+      "mean_confidence": 0.4816005058089892,
+      "n_samples": 600,
+      "random_baseline_accuracy": 0.3283333333333333
+    }
+  },
+  "macro_avg": {
+    "accuracy": 0.7754166666666666,
+    "f1": 0.7431800233224425
+  }
+}
