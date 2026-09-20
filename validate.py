@@ -5,9 +5,22 @@ from torch.utils.data import DataLoader
 from train import CreateDataset  
 
 def validate_model(model, df_val, labels, config, device=None):
-    """TODO: Fix docstring.
-    Computes per-task accuracy, F1, and a random-baseline comparison.
-    Returns a metrics dict ready to be saved to disk.
+    """Compute per-task accuracy, F1, mean confidence, and a random baseline.
+
+    Runs the model over the validation set once, collecting predictions,
+    ground truth, and confidence scores separately per attribute head
+    (since each row only has ground truth for one task).
+
+    Args:
+        model: Trained ModelPC instance.
+        df_val: Validation dataframe (output of split_data).
+        labels: Label definition dict.
+        config: Resolved config dict (used for batch size and random seed).
+        device: torch.device to run inference on; defaults to CUDA if available.
+
+    Returns:
+        metrics: dict, with 'per_task' (metrics per attribute) and 'macro_avg'
+        (accuracy/F1 averaged across tasks).
     """
     device = device or torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.eval()

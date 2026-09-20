@@ -11,17 +11,32 @@ app = FastAPI()
 
 # Define expected shape of an incoming request
 class PredictRequest(BaseModel):
-    """TODO: Explanation."""
+    """Request body for /predict: a single raw (unnormalized) time series.
+    
+    Attributes:
+        series: List of floats, expected length 64 (the model was trained
+            exclusively on Size == 64 TSQA sequences). Normalization is
+            applied server-side.
+    """
     series: list[float]
 
 class AttributePrediction(BaseModel):
-    """TODO: Explanation."""
+    """A single attribute's predicted class and the model's confidence.
+    
+    Attributes:
+        predicted_class: str, highest-probability class label for this attribute.
+        confidence: float, model's softmax probability for predicted_class."""
     predicted_class: str
     confidence: float
 
 # Define the expected shape of output
 class PredictResponse(BaseModel):
-    """TODO: Explanation."""
+    """Response body for /predict: one prediction per attribute head.
+
+    Attributes:
+        predictions: dict keyed by attribute name ('trend', 'volatility',
+            'seasonality', 'outliers'), each holding an AttributePrediction.
+    """
     predictions: dict[str, AttributePrediction]
 
 # Hardcode directory to use

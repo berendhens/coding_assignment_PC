@@ -20,7 +20,22 @@ class CreateDataset(Dataset):
         return series, label_idx, task
 
 def train_model(df_train, df_val, config, labels):
-    """TODO: Create docstring"""
+    """Train the multi-task CNN and return the best checkpoint by validation loss.
+
+    Runs the configured number of epochs, tracking train/val loss each
+    epoch. After training, restores the model weights from whichever
+    epoch had the lowest validation loss (not necessarily the last).
+
+    Args:
+        df_train: Training split (output of split_data).
+        df_val: Validation split (output of split_data).
+        config: Resolved config dict (training hyperparameters, batch size, etc.).
+        labels: Label definition dict (used to determine model's output heads).
+
+    Returns:
+        (model, history) where model is the trained ModelPC instance
+        of best model, and history is a list of per-epoch {'epoch', 'train_loss', 'val_loss'} dicts.
+    """
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Create Dataset that can be loaded by PyTorch for both train and val
@@ -79,7 +94,18 @@ def train_model(df_train, df_val, config, labels):
     return model, history
 
 def evaluate_loss(model, loader, device):
-    """TODO: Create docstring"""
+    """Compute mean masked multi-task loss over a full dataset, without training.
+    
+    Meant to calculate the mean validation loss.
+
+    Args:
+        model: A ModelPC instance.
+        loader: DataLoader yielding (series, label_idx, task) batches.
+        device: torch.device to run inference on.
+
+    Returns:
+        float: mean loss per sample across the dataset.
+    """
     # Go to evaluation mode, reset loss to 0
     model.eval() # No computation of gradients/adaptation of weights possible
     total_loss = 0.0

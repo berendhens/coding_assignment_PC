@@ -19,12 +19,31 @@ def preprocess(df, labels):
     return df
 
 def normalize_series(values, eps: float = 1e-8):
-    """TODO: NEED EXPLANATION"""
+    """Z-score normalisation of single time series using its own mean and std.
+
+    Args:
+        values: Sequence of floats (list or np.ndarray), one time series.
+        eps: Small constant added to std to avoid division by zero.
+
+    Returns:
+        np.ndarray of the same length, normalized to zero mean, unit variance.
+    """
     arr = np.array(values, dtype=np.float32)
     return (arr - arr.mean()) / (arr.std() + eps)
 
 def add_label_index(df, labels):
-    """TODO: NEED EXPLANATION"""
+    """Map each row's Label string to its integer class index, using the labels definition.
+
+    Adds a new 'label_idx' column. Looks up each row's (Task, Label) pair
+    in the shared label vocabulary, so the resulting indices are consistent.
+
+    Args:
+        df: Dataframe with 'Task' and 'Label' columns.
+        labels: The label vocabulary dict from build_labels.
+
+    Returns:
+        The same dataframe with a new integer 'label_idx' column.
+    """
     df["label_idx"] = df.apply(
         lambda row: label_to_index(labels, row["Task"], row["Label"]),
         axis=1

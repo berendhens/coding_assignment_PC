@@ -7,6 +7,8 @@ from train import train_model
 from validate import validate_model
 from save_run import save_run
 
+import numpy as np
+
 if __name__ == "__main__":
     config = load_config("config.yaml")
 

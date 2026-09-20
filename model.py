@@ -45,10 +45,20 @@ class ModelPC(nn.Module):
         return {attr: head(features) for attr, head in self.heads.items()}
 
 def masked_loss(outputs, batch_labels, batch_tasks):
-    """TODO: Fix doctsring
-    outputs: dict[str, Tensor] from model.forward(x), each (batch, 3)
-    batch_labels: (batch,) integer label_idx
-    batch_tasks: (batch,) list/array of task strings, e.g. 'trend'
+    """Compute cross-entropy loss per attribute head, using only matching samples.
+
+    Each sample in a batch has ground truth for exactly one attribute (its
+    'Task'). For every head, this masks the batch down to just the samples
+    belonging to that task and computes standard cross-entropy on them,
+    then sums the per-head losses into a single scalar, the batch loss.
+
+    Args:
+        outputs: dict[str, Tensor], one (batch, 3) logits tensor per attribute head.
+        batch_labels: Tensor of shape (batch,), integer class index per sample. Only index for assigned 'Task'.
+        batch_tasks: list/array of shape (batch,), the 'Task' name per sample.
+
+    Returns:
+        total_loss: summed cross-entropy loss across all matched heads.
     """
     total_loss = 0.0
     matched_head = False

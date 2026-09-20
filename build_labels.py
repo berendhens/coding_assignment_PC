@@ -4,10 +4,19 @@ from datasets import load_dataset
 
 
 def build_labels(df: pd.DataFrame, out_path: str="data/labels.json"):
-    """
-    TODO: FIX DOCSTRING TO ONE FORMAT
-    Inspect the dataset once, derive the class list per task,
-    and persist it as the single source of truth for label <-> index mapping.
+    """Derive the class vocabulary per task from the raw dataset and persist it to disk.
+    
+    Inspects the unique (Task, Label) combinations once and builds a fixed,
+    ordered class list per task. This vocabulary is the single source of
+    truth for label <-> index conversion.
+
+    Args:
+        df: Raw TSQA dataframe with 'Task' and 'Label' columns.
+        out_path: Where to write the resulting labels.json.
+
+    Returns:
+        dict with keys 'attributes' (list of task names) and
+        'classes' (dict mapping each task to its ordered list of class labels)
     """
     labels = {}
     # Run through all tasks (only once) --> sorted() for reproducibility
