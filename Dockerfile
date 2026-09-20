@@ -8,6 +8,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code
 COPY main.py .
+COPY model.py .
+COPY use_labels.py .
+COPY normalize.py .
+
+# Copy the trained model artifacts (weights + label explanation)
+COPY outputs/run_2026-09-20_19-43-46/ ./outputs/run_2026-09-20_19-43-46/
 
 # Inform Docker of the listening port
 EXPOSE 8000
