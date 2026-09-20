@@ -9,7 +9,7 @@ with 3 possible classes, and returns a confidence score per attribute
 This repository has two parts:
 - **Reproducible training pipeline**: one command
     > fetches data, preprocesses it, trains the model, validates it, and saves everything needed to reproduce or serve the result.
-- **Containerised Inference API**/
+- **Containerised Inference API**:
     > a FastAPI service, containerised with Docker, that loads a trained model and serves predictions over HTTP.
 
 ## 1. Reproducible Training Pipeline
@@ -19,7 +19,7 @@ This repository has two parts:
 One command runs the full pipeline end to end:
 
 ```
-fetch data $\rightarrow$ preprocess $\rightarrow$ train $\rightarrow$ validate $\rightarrow$ save model + metrics
+fetch data → preprocess → train → validate → save model + metrics
 ```
 
 Concretely, `python run.py`:
@@ -74,15 +74,15 @@ Each run creates `outputs/run_<timestamp>/` containing:
 ### Model architecture
 
 A shared 1D CNN backbone extracts a 128-dim feature vector from each
-64-length time series. This feeds into **4 independent heads**
+64-length time series. This feeds into 4 independent heads
 (`Dense(3) + softmax`), one per attribute:
 
 ```
 Input (1, 64)
- $\rightarrow$ Conv1d(1 $\rightarrow$ 32, k=5) $\rightarrow$ ReLU $\rightarrow$ MaxPool
- $\rightarrow$ Conv1d(32 $\rightarrow$ 64, k=5) $\rightarrow$ ReLU $\rightarrow$ MaxPool
- $\rightarrow$ Conv1d(64→128, k=3) $\rightarrow$ ReLU $\rightarrow$ AdaptiveAvgPool(1)
- $\rightarrow$ 4x Linear(128 $\rightarrow$ 3), one per attribute (trend / volatility / seasonality / outliers)
+ → Conv1d(1 → 32, k=5) → ReLU → MaxPool
+ → Conv1d(32 → 64, k=5) → ReLU → MaxPool
+ → Conv1d(64 → 128, k=3) → ReLU → AdaptiveAvgPool(1)
+ → 4x Linear(128 → 3), one per attribute (trend / volatility / seasonality / outliers)
 ```
 
 **Why 4 separate heads instead of one 12-way classifier:** 
@@ -116,7 +116,7 @@ Validation set (20% stratified split), single training run:
 **Observations:**
 - All 4 heads clear the random baseline by a wide margin, and 3 of the 4
   attributes (Trend, Outliers, and Volatility) reach near-ceiling
-  accuracy ($>97\%$) after 20 epochs.
+  accuracy (>97%) after 20 epochs.
 - **Trend** and **Outliers** are the most directly learnable from local
   shape (a slope, or a sharp local discontinuity), so near-perfect
   performance here is expected.
@@ -124,8 +124,8 @@ Validation set (20% stratified split), single training run:
   confidence, at epoch 2) but converged to 98% by epoch 20. This trajectory,
   low accuracy early on, climbing with more training, suggests the model 
   needed more epochs to learn this attribute's signal. 
-- **Seasonality is the remaining weak point** ($76\%$, versus
-  $>97\%$ on the other three). Detecting periodicity over a full 64-length
+- **Seasonality is the remaining weak point** (76%, versus
+  >97% on the other three). Detecting periodicity over a full 64-length
   window is a more global pattern than a slope or a spike, and may
   benefit from a larger effective receptive field (bigger kernels or more
   conv layers) than this network currently has. 
@@ -208,9 +208,7 @@ end to end. It may overlap with the training data, so treat it as a
 smoke test rather than a held-out evaluation.
 
 ```bash
-curl -X POST http://localhost:8000/predict \
-  -H "Content-Type: application/json" \
-  -d @sample.json
+curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" -d @sample.json
 ```
 
 Expect `trend.predicted_class` to read `"constant trend"` with high
@@ -221,9 +219,7 @@ confidence, matching this sample's known ground truth.
 Sending a series of the wrong length returns a `422` with a clear message:
 
 ```bash
-curl -X POST http://localhost:8000/predict \
-  -H "Content-Type: application/json" \
-  -d '{"series": [1.0, 2.0, 3.0]}'
+curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" -d '{"series": [1.0, 2.0, 3.0]}'
 ```
 
 ### Known constraints
@@ -235,30 +231,3 @@ curl -X POST http://localhost:8000/predict \
   small CNN at this scale.
 - **Model path is hardcoded** (`RUN_DIR` in `main.py`) to one specific
   training run.
-
-## Project structure
-
-```
-.
-├── run.py                # training pipeline entrypoint
-├── fetch_data.py          # HuggingFace dataset fetch
-├── build_labels.py        # label vocabulary construction
-├── preprocessing.py       # parsing, filtering, normalization, label mapping
-├── normalize.py            # shared normalization fn (used by both training and API)
-├── split_data.py           # stratified train/val split
-├── model.py                 # CNN backbone + 4-head architecture, masked loss
-├── train.py                  # training loop
-├── validate.py                # per-task metrics computation
-├── save_run.py                 # artifact bundling
-├── use_config.py                # config loader
-├── use_labels.py                 # label vocab load/lookup helpers
-├── config.yaml                    # hyperparameters and paths
-├── main.py                         # FastAPI inference service
-├── normalize.py                     # (shared with preprocessing.py)
-├── sample.json                       # example /predict request
-├── Dockerfile
-├── docker-compose.yaml
-├── requirements-train.txt
-├── requirements-api.txt
-└── outputs/run_<timestamp>/            # per-run artifacts (model, metrics, config, history, labels)
-```
