@@ -117,19 +117,19 @@ Validation set (20% stratified split), single training run:
 - All 4 heads clear the random baseline by a wide margin, and 3 of the 4
   attributes (Trend, Outliers, and Volatility) reach near-ceiling
   accuracy (>97%) after 20 epochs.
-- **Trend** and **Outliers** are the most directly learnable from local
+- Trend and Outliers are the most directly learnable from local
   shape (a slope, or a sharp local discontinuity), so near-perfect
   performance here is expected.
-- **Volatility** started weak in early training (52% accuracy, 0.48 mean
+- Volatility started weak in early training (52% accuracy, 0.48 mean
   confidence, at epoch 2) but converged to 98% by epoch 20. This trajectory,
   low accuracy early on, climbing with more training, suggests the model 
   needed more epochs to learn this attribute's signal. 
-- **Seasonality is the remaining weak point** (76%, versus
-  >97% on the other three). Detecting periodicity over a full 64-length
+- Seasonality is the remaining weak point (76%, versus >97% on the other three). 
+Detecting periodicity over a full 64-length
   window is a more global pattern than a slope or a spike, and may
   benefit from a larger effective receptive field (bigger kernels or more
   conv layers) than this network currently has. 
-- **Caveat that remains:** the validation set is used both for
+- Caveat that remains: the validation set is used both for
   best-checkpoint selection during training and for these final reported
   metrics, which makes them somewhat optimistic. A strict held-out test
   set, would give a more honest read. This was chosen as simplification. 
