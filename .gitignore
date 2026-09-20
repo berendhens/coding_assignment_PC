@@ -29,3 +29,5 @@ Thumbs.db
 # Avoid data in GitHub
 data/raw/
 .cache/
+*.arrow
+dataset_info.json
