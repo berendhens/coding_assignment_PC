@@ -1,7 +1,8 @@
 import numpy as np
 import torch
 from sklearn.metrics import accuracy_score, f1_score
-from train import batches  # reuse the same batching helper
+from torch.utils.data import DataLoader
+from train import CreateDataset  
 
 def validate_model(model, df_val, labels, config, device=None):
     """TODO: Fix docstring.
@@ -12,6 +13,9 @@ def validate_model(model, df_val, labels, config, device=None):
     model.eval()
     model.to(device)
 
+    val_ds = CreateDataset(df_val)
+    val_loader = DataLoader(val_ds, batch_size=config["training"]["batch_size"], shuffle=False)
+
     # Collect predictions per task
     per_task_preds = {attr: [] for attr in labels["attributes"]}
     per_task_labels = {attr: [] for attr in labels["attributes"]}
@@ -19,7 +23,7 @@ def validate_model(model, df_val, labels, config, device=None):
 
     with torch.no_grad():
         # Run through validation data in batches
-        for series, label_idx, task in batches(df_val, config["training"]["batch_size"], shuffle=False):
+        for series, label_idx, task in val_loader:
             series = series.to(device)
             outputs = model(series) # Caculate outputs of a forward progression through the model
 

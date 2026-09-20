@@ -1,25 +1,23 @@
-# config.yaml
 seed: 67 # hehe
 
 data:
   dataset_name: "ChengsenWang/TSQA"
   cache_dir: "./data/raw"
-  sequence_length: 64 # shortest sequence length
   val_split: 0.2
 
+# Most hardcoded, but listed here as info
 preprocessing:
-  normalization: "zscore"    # per-sample, as discussed
-  epsilon: 1.0e-8             # avoid div-by-zero on constant series
+  normalization: "zscore" # per-sample
+  epsilon: 1.0e-8         # avoid div-by-zero on constant series
 
 model:
   backbone: "cnn1d"
   conv_channels: [32, 64, 128]
   kernel_size: 5
-  dropout: 0.2
 
 training:
   batch_size: 64
-  epochs: 20
+  epochs: 2
   learning_rate: 0.001
   optimizer: "adam"
 
