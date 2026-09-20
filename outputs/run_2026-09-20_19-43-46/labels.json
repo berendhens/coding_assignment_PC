@@ -1,0 +1,30 @@
+{
+  "attributes": [
+    "outliers",
+    "seasonality",
+    "trend",
+    "volatility"
+  ],
+  "classes": {
+    "outliers": [
+      "level shift",
+      "no outlier",
+      "sudden spike"
+    ],
+    "seasonality": [
+      "fixed seasonal",
+      "no seasonal",
+      "shifting seasonal"
+    ],
+    "trend": [
+      "constant trend",
+      "downward trend",
+      "upward trend"
+    ],
+    "volatility": [
+      "constant volatility",
+      "decreased volatility",
+      "increased volatility"
+    ]
+  }
+}

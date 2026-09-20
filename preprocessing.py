@@ -11,13 +11,17 @@ def preprocess(df, labels):
     df = df[df["Size"] == 64].copy().reset_index(drop=True)
 
     # Normalize each series individually 
-    eps = 1e-8 
-    df["Series"] = [(arr - np.mean(arr)) / (np.std(arr) + eps) for arr in df["Series"]]
+    df["Series"] = [normalize_series(arr) for arr in df["Series"]]
 
     # Create extra column with indices for 'Label' in each 'Task'
     df = add_label_index(df, labels)
 
     return df
+
+def normalize_series(values, eps: float = 1e-8):
+    """TODO: NEED EXPLANATION"""
+    arr = np.array(values, dtype=np.float32)
+    return (arr - arr.mean()) / (arr.std() + eps)
 
 def add_label_index(df, labels):
     """TODO: NEED EXPLANATION"""

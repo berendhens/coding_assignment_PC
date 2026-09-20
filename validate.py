@@ -27,7 +27,7 @@ def validate_model(model, df_val, labels, config, device=None):
             series = series.to(device)
             outputs = model(series) # Caculate outputs of a forward progression through the model
 
-            # Run through each task, as output is only relevant for specific assigned task
+            # Run through each task, as output has only GT for specific assigned task
             for attr in labels["attributes"]:
                 # Create mask to indicate which entries have the assigned task
                 mask = np.array([t == attr for t in task])

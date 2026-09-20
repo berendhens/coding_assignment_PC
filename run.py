@@ -28,10 +28,13 @@ if __name__ == "__main__":
         random_state=config["seed"],
     )
 
+    # Train the model
     model, history = train_model(df_train, df_val, config, labels)
     print(f"Training complete. Final val_loss: {history[-1]['val_loss']:.4f}")
 
+    # Validate model with same data as validation data -- limitation
     metrics = validate_model(model, df_val, labels, config)
     print(f"\nOverall accuracy: {metrics['macro_avg']['accuracy']:.3f}, \n Overall F1: {metrics['macro_avg']['f1']:.3f}")
 
+    # Save model, training history, metrics of final model, configuration, data labels
     run_directory = save_run(model, history, metrics, config, labels, base_dir="outputs")
