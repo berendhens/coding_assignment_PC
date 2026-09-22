@@ -3,7 +3,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Install dependencies first to leverage Docker layer caching
-COPY requirements.txt .
+COPY requirements_api.txt .
 RUN pip install --no-cache-dir -r requirements_api.txt
 
 # Copy the application code
