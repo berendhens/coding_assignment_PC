@@ -219,7 +219,7 @@ confidence, matching this sample's known ground truth.
 Sending a series of the wrong length returns a `422` with a clear message:
 
 ```bash
-curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" -d '{"series": [1.0, 2.0, 3.0]}'
+curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" -d "{\"series\": [1.0, 2.0, 3.0]}"
 ```
 
 ### Known constraints
